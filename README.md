@@ -39,3 +39,12 @@
 
 2.通过拖拽3个新增的滑块控件修改的数值不能让文本框同步更新数值，这是代码本身的写法问题懒得处理
 
+
+## 超出我能力的还需要处理的事：
+1.内存性能问题，原本没处理的问题
+
+2.spine2.1版本支持
+
+3.透明度问题，部分模型有白边，经过对比发现SpineViewerWPF在菜单栏Attributes里第一二行选项他比官方的skeletonViewer多一个SpineUseAlpha选项，经过反复对比发现skeletonViewer应该是默认开启最基础的这个Alpha功能的，而SuperSpineViewer刚好缺失了这个功能，只有PreAlpha，所以会导致一些模型会有白边问题。
+在SpineViewerWPF中，无论先后顺序，只要同时勾选了这两种Alpha模式就会让白边消失，而在skeletonViewer中直接不开启PreAlpha就是无白边的。
+至于怎么搞我反正不懂。
