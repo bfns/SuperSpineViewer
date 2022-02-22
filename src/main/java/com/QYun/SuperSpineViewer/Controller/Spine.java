@@ -16,10 +16,12 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextFormatter;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -63,6 +65,27 @@ public class Spine extends Main implements Initializable {
     @FXML
     private JFXSpinner red;
 
+    @FXML
+    void dragov(DragEvent event) {
+        if (event.getGestureSource() != spinePane
+                && event.getDragboard().hasFiles()) {
+            /* allow for both copying and moving, whatever user chooses */
+            event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+        }
+        event.consume();
+    }
+    @FXML
+    void draged(DragEvent event) {
+        Dragboard db = event.getDragboard();
+        if (db.getFiles() != null) {
+            openPath = String.valueOf(db.getFiles().get(0));
+            new Loader().init();
+            if (isLoad) System.out.println("请求重载");
+            else System.out.println("请求初始化");
+        }
+        event.consume();
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         AtomicReference<String> headerColor = new AtomicReference<>(getColor((short) ((Math.random() * 12) % 22)));
@@ -71,7 +94,7 @@ public class Spine extends Main implements Initializable {
             setImage(new Image("/UI/SpineLogo.png", 138, 0, true, true, false));
         }};
 
-        Label project = new Label("Waiting Loading...") {{
+        Label project = new Label("等待加载...") {{
             setStyle("-fx-text-fill: #f1f1f2;");
             getStyleClass().add("normal-label");
         }};
@@ -86,20 +109,45 @@ public class Spine extends Main implements Initializable {
             setAlignment(Pos.BOTTOM_LEFT);
         }};
 
-        JFXTextField T_Scale = new JFXTextField() {{
-            setPromptText("1.0");
-            setTextFormatter(new TextFormatter<String>(change -> {
-                if (change.getText().matches("[0-9]*|\\."))
-                    return change;
-                return null;
-            }));
 
-            setOnKeyPressed(keyEvent -> {
+        JFXSlider T_Scale = new JFXSlider() {{
+            setSnapToTicks(true);
+            setShowTickLabels(true);
+            setMin(0.25);
+            setMax(2.0);
+            setMajorTickUnit(0.25);
+            setBlockIncrement(0.1);
+            setValue(1.0);
+
+            setValueFactory(slider ->
+                    Bindings.createStringBinding(() -> ((int) (getValue() * 10) / 10f) + "x", slider.valueProperty())
+            );
+            valueProperty().addListener(
+                    (observable, oldValue, newValue) ->{
+//                        T_Scale1.setText(String.valueOf((getValue())));
+                        spine.setScale((float) getValue());
+                    });
+        }};
+        JFXTextField T_Scale1 = new JFXTextField()
+        {{
+            setText(String.valueOf(T_Scale.getValue()));
+
+            setOnKeyReleased(keyEvent -> {
                 if (keyEvent.getCode().equals(KeyCode.ENTER))
                     if (getText().matches("^[1-9]\\d*$|^[1-9]\\d*\\.\\d*|0\\.\\d*[1-9]\\d*$"))
-                        spine.setScale(Float.parseFloat(getText()));
+                        if(getText()!="0"){
+                    T_Scale.setValue(Float.parseFloat(getText()));
+                    spine.setScale(Float.parseFloat(getText()));
+                }});
+            setOnScroll(ScrollEvent -> {
+                double Scale_temp=Double.parseDouble(getText())-(ScrollEvent.getTextDeltaY()/30);
+                setText(String.valueOf(String.format("%.2f",Scale_temp)));
+                T_Scale.setValue(Double.parseDouble(String.format("%.2f",Scale_temp)));
+                spine.setScale(Float.parseFloat(String.valueOf(T_Scale.getValue())));
             });
+
         }};
+
 
         JFXTextField T_Width = new JFXTextField() {{
             setEditable(false);
@@ -109,44 +157,92 @@ public class Spine extends Main implements Initializable {
             setEditable(false);
         }};
 
-        JFXTextField T_X = new JFXTextField() {{
-            setPromptText("0.0");
-            setTextFormatter(new TextFormatter<String>(change -> {
-                if (change.getText().matches("[0-9]*|\\.|-"))
-                    return change;
-                return null;
-            }));
+        JFXSlider T_X = new JFXSlider() {{
+            setMin(-200);
+            setMax(500);
+            setMajorTickUnit(100);
+            setBlockIncrement(10);
+            setValue(0);
+            setShowTickLabels(true);
 
-            setOnKeyPressed(keyEvent -> {
+            setValueFactory(slider ->
+                    Bindings.createStringBinding(() -> ((int) (getValue()))+" ", slider.valueProperty())
+            );
+            valueProperty().addListener(
+                    (observable, oldValue, newValue) -> spine.setX((float) getValue()));
+
+        }};
+
+        JFXTextField T_X1 = new JFXTextField() {{
+//            setPromptText("0");
+            setText(String.valueOf(T_X.getValue()));
+//            setTextFormatter(new TextFormatter<String>(change -> {
+//                if (change.getText().matches("[0-9]*|\\.|-"))
+//                    return change;
+//                return null;
+//            }));
+
+            setOnKeyReleased(keyEvent -> {
                 if (keyEvent.getCode().equals(KeyCode.ENTER))
                     if (getText().matches("-?[0-9]\\d*|-?([1-9]\\d*.\\d*|0\\.\\d*[1-9]\\d*)"))
+                        T_X.setValue(Float.parseFloat(getText()));
                         spine.setX(Float.parseFloat(getText()));
+            });
+            setOnScroll(ScrollEvent -> {
+                float T_X_temp=Math.round(Float.parseFloat(getText())-ScrollEvent.getTextDeltaY());
+                T_X.setValue(T_X_temp);
+                setText(String.valueOf(T_X_temp));
+                spine.setX(T_X_temp);
             });
         }};
 
-        JFXTextField T_Y = new JFXTextField() {{
-            setPromptText("-200");
-            setTextFormatter(new TextFormatter<String>(change -> {
-                if (change.getText().matches("[0-9]*|\\.|-"))
-                    return change;
-                return null;
-            }));
+        JFXSlider T_Y = new JFXSlider() {{
+            setMin(-200);
+            setMax(500);
+            setMajorTickUnit(100);
+            setBlockIncrement(1);
+            setValue(0);
+            setShowTickLabels(true);
 
-            setOnKeyPressed(keyEvent -> {
+            setValueFactory(slider ->
+                    Bindings.createStringBinding(() -> ((int) (getValue()))+" ", slider.valueProperty())
+            );
+            valueProperty().addListener(
+                    (observable, oldValue, newValue) -> spine.setY((float) getValue()));
+        }};
+
+        JFXTextField T_Y1 = new JFXTextField() {{
+//            setPromptText("0.0");
+              setText(String.valueOf(T_Y.getValue()));
+//            setTextFormatter(new TextFormatter<String>(change -> {
+//                if (change.getText().matches("[0-9]*|\\.|-"))
+//                    return change;
+//                return null;
+//            }));
+
+            setOnKeyReleased(keyEvent -> {
                 if (keyEvent.getCode().equals(KeyCode.ENTER))
                     if (getText().matches("-?[0-9]\\d*|-?([1-9]\\d*.\\d*|0\\.\\d*[1-9]\\d*)"))
+                        T_Y.setValue(Float.parseFloat(getText()));
                         spine.setY(Float.parseFloat(getText()));
+            });
+            setOnScroll(ScrollEvent -> {
+                float T_Y_temp=Math.round(Float.parseFloat(getText())-ScrollEvent.getTextDeltaY());
+                T_Y.setValue(T_Y_temp);
+                setText(String.valueOf(T_Y_temp));
+                spine.setY(T_Y_temp);
             });
         }};
 
         JFXSlider S_Speed = new JFXSlider() {{
-            setSnapToTicks(true);
-            setShowTickLabels(true);
+//            setSnapToTicks(true);
+//            setShowTickLabels(true);
             setMin(0.25);
             setMax(2.0);
             setMajorTickUnit(0.25);
             setBlockIncrement(0.25);
             setValue(1);
+            setShowTickLabels(true);
 
             setValueFactory(slider ->
                     Bindings.createStringBinding(() -> ((int) (getValue() * 100) / 100f) + "x", slider.valueProperty())
@@ -226,33 +322,46 @@ public class Spine extends Main implements Initializable {
                 getChildren().add(new ScrollPane(new VBox(20) {{
                     setPadding(new Insets(14, 16, 20, 16));
                     getChildren().addAll(
-                            new Label("Load Scale") {{
-                                getStyleClass().add("normal-label");
-                            }}, T_Scale,
-                            new Label("Position X") {{
-                                getStyleClass().add("normal-label");
-                            }}, T_X,
-                            new Label("Position Y") {{
-                                getStyleClass().add("normal-label");
-                            }}, T_Y,
-                            new Label("Camera Width") {{
-                                getStyleClass().add("normal-label");
-                            }}, T_Width,
-                            new Label("Camera Height") {{
-                                getStyleClass().add("normal-label");
-                            }}, T_Height,
-                            new Label("Play Speed") {{
-                                getStyleClass().add("normal-label");
-                            }}, S_Speed,
+                            new HBox(
+                            new Label("缩放比例") {{getStyleClass().add("normal-label");}},
+                                    new HBox(T_Scale1){{setMaxWidth(100);setStyle("-fx-padding: 0 0 0 18;");}}
+                            ),
+                            new VBox(T_Scale){{setMaxWidth(300);}},
+
+
+                            new HBox(
+                            new Label("坐标X 　") {{getStyleClass().add("normal-label");}},
+                                    new HBox(T_X1){{setMaxWidth(100);setStyle("-fx-padding: 0 0 0 18;");}}
+                            ),
+                            new VBox(T_X){{setMaxWidth(300);}},
+
+
+                            new HBox(
+                            new Label("坐标Y 　") {{getStyleClass().add("normal-label");}},
+                                    new HBox(T_Y1){{setMaxWidth(100);setStyle("-fx-padding: 0 0 0 18;");}}
+                            ),
+                            new VBox(T_Y){{setMaxWidth(300);}},
+
+                            new HBox(
+                            new Label("模型宽度") {{getStyleClass().add("normal-label");}},
+                                    new HBox(T_Width){{setMaxWidth(250);setStyle("-fx-padding: 0 0 0 18;");}}
+                            ),
+                            new HBox(
+                            new Label("模型高度") {{getStyleClass().add("normal-label");}},
+                                    new HBox(T_Height){{setMaxWidth(250);setStyle("-fx-padding: 0 0 0 18;");}}
+                            ),
+                            new Label("播放速度") {{getStyleClass().add("normal-label");}}, S_Speed,
 
                             new FlowPane(
-                                    new Label("Loop") {{
+                                    new Label("循环") {{
                                         getStyleClass().add("normal-label");
                                     }},
                                     new JFXToggleButton() {{
+                                        setSelected(true);
+                                        spine.setIsLoop(isSelected());
                                         setOnAction(event1 -> spine.setIsLoop(isSelected()));
                                     }},
-                                    new JFXButton("Reload") {{
+                                    new JFXButton("重新读取模型") {{
                                         setStyle("-fx-text-fill:#5264AE;-fx-font-size:14px;");
                                         setButtonType(ButtonType.FLAT);
 
@@ -261,7 +370,7 @@ public class Spine extends Main implements Initializable {
                                             new Loader().init();
                                         });
                                     }},
-                                    new JFXButton("Reset") {{
+                                    new JFXButton("重置参数") {{
                                         setStyle("-fx-text-fill:#5264AE;-fx-font-size:14px;");
                                         setButtonType(ButtonType.FLAT);
 
@@ -271,23 +380,28 @@ public class Spine extends Main implements Initializable {
                                             spine.setY(-200f);
                                             spine.setIsPlay(false);
 
-                                            T_Scale.clear();
-                                            T_X.clear();
-                                            T_Y.clear();
+//                                            T_Scale.clear();
+//                                            T_X.clear();
+//                                            T_Y.clear();
+                                            T_Scale.setValue(1);
+                                            T_X.setValue(0);
+                                            T_Y.setValue(0);
                                             C_Skins.setValue(null);
                                             C_Animate.setValue(null);
                                             S_Speed.setValue(1);
                                             System.gc();
                                         });
-                                    }}) {{
+                                    }}
+                            )
+                            {{
                                 setMaxWidth(300);
                                 setStyle("-fx-padding: 0 0 0 18;");
                             }},
 
-                            new Label("Skins") {{
+                            new Label("皮肤") {{
                                 getStyleClass().add("normal-label");
                             }}, C_Skins,
-                            new Label("Animations") {{
+                            new Label("动画") {{
                                 getStyleClass().add("normal-label");
                             }}, C_Animate);
                 }}) {{

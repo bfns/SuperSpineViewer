@@ -1,183 +1,182 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.*?>
+<?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.Font?>
-<?import java.lang.*?>
-<StackPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/15.0.1"
-           fx:controller="com.QYun.SuperSpineViewer.Controller.Exporter">
+<?import javafx.scene.text.*?>
+
+<StackPane xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.QYun.SuperSpineViewer.Controller.Exporter">
     <ScrollPane hbarPolicy="NEVER" styleClass="side-menu">
         <VBox spacing="20.0">
             <padding>
-                <Insets bottom="20.0" left="16.0" right="10.0" top="20.0"/>
+                <Insets bottom="20.0" left="16.0" right="10.0" top="20.0" />
             </padding>
-            <JFXButton onAction="#B_Open" text="Open Skeleton" textFill="#5264ae">
+            <JFXButton onAction="#B_Open" text="打开文件" textFill="#5264ae">
                 <font>
-                    <Font name="System Bold" size="14.0"/>
+                    <Font name="System Bold" size="14.0" />
                 </font>
             </JFXButton>
             <VBox spacing="12.0">
                 <padding>
-                    <Insets left="8.0"/>
+                    <Insets left="8.0" />
                 </padding>
-                <Label text="Project Information">
+                <Label text="-项目信息-">
                     <styleClass>
-                        <String fx:value="side-label"/>
-                        <String fx:value="BOLD"/>
+                        <String fx:value="side-label" />
+                        <String fx:value="BOLD" />
                     </styleClass>
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
                 </Label>
-                <Label fx:id="L_Version" styleClass="side-label" text="Version : "/>
-                <Label fx:id="L_Skel" styleClass="side-label" text="Skel : "/>
-                <Label fx:id="L_Atlas" styleClass="side-label" text="Atlas : "/>
-                <Label fx:id="L_FPS" styleClass="side-label" text="FPS : "/>
+                <Label fx:id="L_Version" styleClass="side-label" text="版本 : " />
+                <Label fx:id="L_Skel" styleClass="side-label" text="Skel : " />
+                <Label fx:id="L_Atlas" styleClass="side-label" text="Atlas : " />
+                <Label fx:id="L_FPS" styleClass="side-label" text="FPS : " />
             </VBox>
             <VBox spacing="16.0">
                 <padding>
-                    <Insets left="8.0"/>
+                    <Insets left="8.0" />
                 </padding>
-                <Label text="Graphic Setting">
+                <Label text="-图像设置-">
                     <styleClass>
-                        <String fx:value="side-label"/>
-                        <String fx:value="BOLD"/>
+                        <String fx:value="side-label" />
+                        <String fx:value="BOLD" />
+                    </styleClass>
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+                </Label>
+                <Label text="质量: ">
+                    <styleClass>
+                        <String fx:value="side-label" />
+                        <String fx:value="BOLD" />
                     </styleClass>
                 </Label>
-                <Label text="Quality : ">
-                    <styleClass>
-                        <String fx:value="side-label"/>
-                        <String fx:value="BOLD"/>
-                    </styleClass>
-                </Label>
-                <HBox spacing="16.0">
-                    <JFXRadioButton onAction="#RB_S" selected="true" text="Standard">
+                <HBox spacing="20.0">
+                    <JFXRadioButton onAction="#RB_S" selected="true" text="标准">
                         <styleClass>
-                            <String fx:value="custom-jfx-radio-button"/>
-                            <String fx:value="custom-jfx-radio-button-blue"/>
+                            <String fx:value="custom-jfx-radio-button" />
+                            <String fx:value="custom-jfx-radio-button-blue" />
                         </styleClass>
-                        <toggleGroup>
-                            <ToggleGroup fx:id="Quality"/>
-                        </toggleGroup>
+                  <toggleGroup>
+                     <ToggleGroup fx:id="Quality" />
+                  </toggleGroup>
                     </JFXRadioButton>
-                    <JFXRadioButton onAction="#RB_E" text="Extreme" toggleGroup="$Quality">
+                    <JFXRadioButton onAction="#RB_E" text="极致" toggleGroup="$Quality">
                         <styleClass>
-                            <String fx:value="custom-jfx-radio-button"/>
-                            <String fx:value="custom-jfx-radio-button-red"/>
+                            <String fx:value="custom-jfx-radio-button" />
+                            <String fx:value="custom-jfx-radio-button-red" />
                         </styleClass>
                     </JFXRadioButton>
-                    <JFXRadioButton layoutX="105.0" layoutY="10.0" onAction="#RB_F" text="Fast" toggleGroup="$Quality">
+                    <JFXRadioButton onAction="#RB_F" text="快速" toggleGroup="$Quality">
                         <styleClass>
-                            <String fx:value="custom-jfx-radio-button"/>
-                            <String fx:value="custom-jfx-radio-button-green"/>
+                            <String fx:value="custom-jfx-radio-button" />
+                            <String fx:value="custom-jfx-radio-button-green" />
                         </styleClass>
                     </JFXRadioButton>
                 </HBox>
-                <Label layoutX="18.0" layoutY="41.0" text="Performance : ">
+                <Label layoutX="18.0" layoutY="41.0" text="性能 : ">
                     <styleClass>
-                        <String fx:value="side-label"/>
-                        <String fx:value="BOLD"/>
+                        <String fx:value="side-label" />
+                        <String fx:value="BOLD" />
                     </styleClass>
                 </Label>
-                <HBox spacing="26.0">
-                    <JFXRadioButton onAction="#RB_N" selected="true" text="Normal">
+                <HBox spacing="20.0">
+                    <JFXRadioButton onAction="#RB_N" selected="true" text="普通">
                         <styleClass>
-                            <String fx:value="custom-jfx-radio-button"/>
-                            <String fx:value="custom-jfx-radio-button-blue"/>
+                            <String fx:value="custom-jfx-radio-button" />
+                            <String fx:value="custom-jfx-radio-button-blue" />
                         </styleClass>
-                        <toggleGroup>
-                            <ToggleGroup fx:id="Perform"/>
-                        </toggleGroup>
+                  <toggleGroup>
+                     <ToggleGroup fx:id="Perform" />
+                  </toggleGroup>
                     </JFXRadioButton>
-                    <JFXRadioButton onAction="#RB_H" text="High" toggleGroup="$Perform">
+                    <JFXRadioButton onAction="#RB_H" text="高　" toggleGroup="$Perform">
                         <styleClass>
-                            <String fx:value="custom-jfx-radio-button"/>
-                            <String fx:value="custom-jfx-radio-button-red"/>
+                            <String fx:value="custom-jfx-radio-button" />
+                            <String fx:value="custom-jfx-radio-button-red" />
                         </styleClass>
                     </JFXRadioButton>
-                    <JFXRadioButton onAction="#RB_L" text="Low" toggleGroup="$Perform">
+                    <JFXRadioButton onAction="#RB_L" text="低　" toggleGroup="$Perform">
                         <styleClass>
-                            <String fx:value="custom-jfx-radio-button"/>
-                            <String fx:value="custom-jfx-radio-button-green"/>
+                            <String fx:value="custom-jfx-radio-button" />
+                            <String fx:value="custom-jfx-radio-button-green" />
                         </styleClass>
-                        <HBox.margin>
-                            <Insets left="12.0"/>
-                        </HBox.margin>
                     </JFXRadioButton>
                 </HBox>
+                <Label text="格式 : ">
+                    <styleClass>
+                        <String fx:value="side-label" />
+                        <String fx:value="BOLD" />
+                    </styleClass>
+                </Label>
+
+                   <HBox spacing="16.0">
+                       <JFXRadioButton onAction="#RB_MOV" selected="true" text="MOV">
+                           <styleClass>
+                               <String fx:value="custom-jfx-radio-button" />
+                               <String fx:value="custom-jfx-radio-button-blue" />
+                           </styleClass>
+                           <toggleGroup>
+                               <ToggleGroup fx:id="Format" />
+                           </toggleGroup>
+                       </JFXRadioButton>
+                       <JFXRadioButton onAction="#RB_MP4" text="MP4" toggleGroup="$Format">
+                           <styleClass>
+                               <String fx:value="custom-jfx-radio-button" />
+                               <String fx:value="custom-jfx-radio-button-red" />
+                           </styleClass>
+   
+                       </JFXRadioButton>
+                       <JFXRadioButton onAction="#RB_Sequence" text="逐帧" toggleGroup="$Format">
+                           <styleClass>
+                               <String fx:value="custom-jfx-radio-button" />
+                               <String fx:value="custom-jfx-radio-button-green" />
+                           </styleClass>
+                       </JFXRadioButton>
+                   </HBox>
             </VBox>
             <VBox spacing="16.0">
                 <padding>
-                    <Insets left="8.0"/>
+                    <Insets left="8.0" />
                 </padding>
-                <Label text="Format : ">
+                <Label text="-输出设置-">
                     <styleClass>
-                        <String fx:value="side-label"/>
-                        <String fx:value="BOLD"/>
+                        <String fx:value="side-label" />
+                        <String fx:value="BOLD" />
                     </styleClass>
-                </Label>
-                <HBox spacing="38.0">
-                    <JFXRadioButton onAction="#RB_MOV" selected="true" text="MOV">
-                        <styleClass>
-                            <String fx:value="custom-jfx-radio-button"/>
-                            <String fx:value="custom-jfx-radio-button-blue"/>
-                        </styleClass>
-                        <toggleGroup>
-                            <ToggleGroup fx:id="Format"/>
-                        </toggleGroup>
-                    </JFXRadioButton>
-                    <JFXRadioButton onAction="#RB_Sequence" text="Sequence" toggleGroup="$Format">
-                        <styleClass>
-                            <String fx:value="custom-jfx-radio-button"/>
-                            <String fx:value="custom-jfx-radio-button-red"/>
-                        </styleClass>
-                    </JFXRadioButton>
-                    <JFXRadioButton disable="true" onAction="#RB_Json" text="Json" toggleGroup="$Format">
-                        <styleClass>
-                            <String fx:value="custom-jfx-radio-button"/>
-                            <String fx:value="custom-jfx-radio-button-green"/>
-                        </styleClass>
-                        <HBox.margin>
-                            <Insets left="-28.0"/>
-                        </HBox.margin>
-                    </JFXRadioButton>
-                </HBox>
-            </VBox>
-            <VBox spacing="16.0">
-                <padding>
-                    <Insets left="8.0"/>
-                </padding>
-                <Label text="Exporter Setting">
-                    <styleClass>
-                        <String fx:value="side-label"/>
-                        <String fx:value="BOLD"/>
-                    </styleClass>
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
                 </Label>
                 <HBox maxWidth="250.0">
                     <padding>
-                        <Insets right="10.0"/>
+                        <Insets right="10.0" />
                     </padding>
-                    <JFXButton minWidth="53.0" onAction="#B_Path" text="Path" textFill="#5264ae">
+                    <JFXButton minWidth="80.0" onAction="#B_Path" text="输出地址" textFill="#5264ae">
                         <font>
-                            <Font name="System Bold" size="14.0"/>
+                            <Font name="System Bold" size="14.0" />
                         </font>
                     </JFXButton>
-                    <JFXTextField fx:id="T_Path"/>
+                    <JFXTextField fx:id="T_Path" />
                 </HBox>
                 <HBox maxWidth="250.0">
                     <padding>
-                        <Insets right="10.0"/>
+                        <Insets right="10.0" />
                     </padding>
                     <FlowPane hgap="10.0">
-                        <JFXButton onAction="#B_Export" text="Export" textFill="#5264ae">
+                        <JFXButton onAction="#B_Export" text="开始输出" textFill="#5264ae">
                             <font>
-                                <Font name="System Bold" size="14.0"/>
+                                <Font name="System Bold" size="14.0" />
                             </font>
                         </JFXButton>
-                        <JFXCheckBox onAction="#PreA" selected="true" styleClass="custom-jfx-check-box"
-                                     text="Pre-Alpha"/>
+                        <JFXCheckBox onAction="#PreA" selected="true" styleClass="custom-jfx-check-box" text="Pre-Alpha" />
                     </FlowPane>
                 </HBox>
-                <JFXProgressBar fx:id="P_Export" maxWidth="250.0"/>
+                <JFXProgressBar fx:id="P_Export" maxWidth="250.0" />
             </VBox>
         </VBox>
     </ScrollPane>

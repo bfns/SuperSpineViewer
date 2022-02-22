@@ -116,6 +116,10 @@ public class Exporter extends Main implements Initializable {
     void RB_MOV() {
         sequence = 0;
     }
+    @FXML
+    void RB_MP4() {
+        sequence = 1;
+    }
 
     @FXML
     void RB_Sequence() {
@@ -127,9 +131,7 @@ public class Exporter extends Main implements Initializable {
     }
 
     @FXML
-    void PreA() {
-        preA = !preA;
-    }
+    void PreA() {preA = !preA;}
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
