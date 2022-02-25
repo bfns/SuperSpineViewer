@@ -10,11 +10,14 @@ import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -25,12 +28,16 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.scene.text.Text;
 import javafx.util.Duration;
 import org.kordamp.ikonli.javafx.FontIcon;
 
+import java.io.File;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 import static javafx.animation.Interpolator.EASE_BOTH;
 
@@ -66,6 +73,10 @@ public class Spine extends Main implements Initializable {
     private JFXSpinner red;
 
     @FXML
+    ListView<Text> list1;
+
+    //拖拽文件加载模型
+    @FXML
     void dragov(DragEvent event) {
         if (event.getGestureSource() != spinePane
                 && event.getDragboard().hasFiles()) {
@@ -84,6 +95,57 @@ public class Spine extends Main implements Initializable {
             else System.out.println("请求初始化");
         }
         event.consume();
+    }
+    //拖拽到列表中点击加载模型
+    JFXComboBox<String> C_Animate = new JFXComboBox<>() {{
+        setItems(spine.getAnimatesList());
+        setOnAction(event -> spine.setAnimate(getValue()));
+    }};
+    ObservableList<File> list;
+    @FXML
+    void dragovL(DragEvent event) {
+        if (event.getGestureSource() != spinePane
+                && event.getDragboard().hasFiles()) {
+            /* allow for both copying and moving, whatever user chooses */
+            event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+        }
+        event.consume();
+    }
+    @FXML
+    void dragedL(DragEvent event) {
+        Dragboard db = event.getDragboard();
+        if (db.hasFiles()) {
+            List<File> files = db.getFiles();
+            List<Text> textList = files.stream().map(File::getAbsolutePath)
+                    .map(Text::new)
+                    .peek(text -> text.setOnMouseClicked(clickEvent -> {
+                        Object source = clickEvent.getSource();
+                        Text clickSource = null;
+                        if (source instanceof Text) {
+                            clickSource = (Text) source;
+                            System.out.println(clickSource.getText());
+                        }
+                        openPath = clickSource.getText();
+                        new Loader().init();
+                        if (isLoad) System.out.println("请求重载");
+                        else System.out.println("请求初始化");
+
+
+                        //默认播放Idle动画，这里需要改成记录上一次选择的动画名称，因为不是所有模型都有同样的动画名
+                        C_Animate.setValue("Idle");
+                        spine.setIsPlay(false);
+                        try {
+                            Thread.sleep(250);
+                        } catch(InterruptedException ex) {
+                            Thread.currentThread().interrupt();
+                        }
+                        spine.setIsPlay(true);
+                    }))
+                    .collect(Collectors.toList());
+            ObservableList<Text> fileObservableList = FXCollections.observableArrayList(textList);
+            list1.setItems(fileObservableList);
+            event.consume();
+        }
     }
 
     @Override
@@ -256,10 +318,10 @@ public class Spine extends Main implements Initializable {
             setOnAction(event -> spine.setSkin(getValue()));
         }};
 
-        JFXComboBox<String> C_Animate = new JFXComboBox<>() {{
-            setItems(spine.getAnimatesList());
-            setOnAction(event -> spine.setAnimate(getValue()));
-        }};
+//        JFXComboBox<String> C_Animate = new JFXComboBox<>() {{
+//            setItems(spine.getAnimatesList());
+//            setOnAction(event -> spine.setAnimate(getValue()));
+//        }};
 
         FontIcon playIcon = new FontIcon() {{
             setIconSize(20);
@@ -377,7 +439,7 @@ public class Spine extends Main implements Initializable {
                                         setOnAction(event -> {
                                             spine.setScale(1);
                                             spine.setX(0);
-                                            spine.setY(-200f);
+                                            spine.setY(0);
                                             spine.setIsPlay(false);
 
 //                                            T_Scale.clear();
@@ -398,12 +460,13 @@ public class Spine extends Main implements Initializable {
                                 setStyle("-fx-padding: 0 0 0 18;");
                             }},
 
-                            new Label("皮肤") {{
-                                getStyleClass().add("normal-label");
-                            }}, C_Skins,
-                            new Label("动画") {{
-                                getStyleClass().add("normal-label");
-                            }}, C_Animate);
+                            new VBox(
+                                    new HBox(new Label("皮肤") {{getStyleClass().add("normal-label");}},
+                                            new HBox(new Label("动画") {{getStyleClass().add("normal-label");}}){{setStyle("-fx-padding: 0 0 0 80;");}}),
+                                    new HBox(C_Skins,
+                                            new HBox(C_Animate){{setStyle("-fx-padding: 0 0 0 55;");}})
+                            )
+                    );
                 }}) {{
                     setHbarPolicy(ScrollBarPolicy.NEVER);
                 }});

@@ -40,7 +40,7 @@ public class Launcher extends Application {
         primaryStage.getIcons().add(new Image("UI/SuperSpineViewer.png"));
         primaryStage.setWidth(Pref.getDouble("stageWidth", 1280));
         primaryStage.setHeight(Pref.getDouble("stageHeight", 800));
-        primaryStage.setTitle("QYun SoarTeam-暴风修改版1.1");
+        primaryStage.setTitle("QYun SoarTeam v1.2.6-暴风修改版1.2");
         primaryStage.show();
         icon.requestFocus();
     }

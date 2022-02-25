@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.*?>
-<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+
+<!--<StackPane onDragDropped="#draged" onDragOver="#dragov" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.QYun.SuperSpineViewer.Controller.Spine">-->
 
 <StackPane xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.QYun.SuperSpineViewer.Controller.Spine">
     <BorderPane fx:id="Viewer">
         <left>
-            <StackPane onDragDropped="#draged" onDragOver="#dragov" fx:id="spinePane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="697.0" prefWidth="360">
-            </StackPane>
+               <VBox prefHeight="200.0" prefWidth="100.0">
+            <children>
+               <StackPane fx:id="spinePane" minHeight="-Infinity" minWidth="-Infinity" onDragDropped="#draged" onDragOver="#dragov" prefHeight="760.0" prefWidth="360" />
+               <ListView fx:id="list1" onDragDropped="#dragedL" onDragOver="#dragovL" prefHeight="200.0" prefWidth="300.0" />
+            </children></VBox>
+
         </left>
         <center>
             <StackPane fx:id="loadPane">
