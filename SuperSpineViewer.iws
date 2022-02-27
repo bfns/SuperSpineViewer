@@ -10,15 +10,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="dd482726-7ed0-45eb-8aa0-76349648e024" name="变更" comment="">
-      <change afterPath="$PROJECT_DIR$/out/SuperSpineViewer.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/META-INF/MANIFEST.MF" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SuperSpineViewer.ipr" beforeDir="false" afterPath="$PROJECT_DIR$/SuperSpineViewer.ipr" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SuperSpineViewer.iws" beforeDir="false" afterPath="$PROJECT_DIR$/SuperSpineViewer.iws" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/QYun/SuperSpineViewer/Controller/Launcher.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/QYun/SuperSpineViewer/Controller/Launcher.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/QYun/SuperSpineViewer/Controller/Spine.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/QYun/SuperSpineViewer/Controller/Spine.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/UI/Spine.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/UI/Spine.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/QYun/SuperSpineViewer/RecordFX.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/QYun/SuperSpineViewer/RecordFX.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -382,7 +376,11 @@
       <workItem from="1645636475427" duration="52000" />
       <workItem from="1645680546257" duration="806000" />
       <workItem from="1645687522856" duration="14589000" />
-      <workItem from="1645776224954" duration="119000" />
+      <workItem from="1645776224954" duration="1006000" />
+      <workItem from="1645785843139" duration="665000" />
+      <workItem from="1645882579889" duration="1377000" />
+      <workItem from="1645890802105" duration="712000" />
+      <workItem from="1645939940780" duration="2844000" />
     </task>
     <task id="LOCAL-00001" summary="大幅修改，便利性优化">
       <created>1645542356297</created>
@@ -391,7 +389,14 @@
       <option name="project" value="LOCAL" />
       <updated>1645542356297</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="添加拖拽文件列表，点击加载">
+      <created>1645776491245</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1645776491246</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TodoView" selected-index="0">
@@ -446,7 +451,8 @@
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="大幅修改，便利性优化" />
-    <option name="LAST_COMMIT_MESSAGE" value="大幅修改，便利性优化" />
+    <MESSAGE value="添加拖拽文件列表，点击加载" />
+    <option name="LAST_COMMIT_MESSAGE" value="添加拖拽文件列表，点击加载" />
   </component>
   <component name="VssConfiguration">
     <CheckoutOptions>

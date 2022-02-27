@@ -65,7 +65,7 @@ public class RecordFX extends Main {
         System.gc();
     }
 
-    private void ffmpegFX() {
+    private void ffmpeg_MOV() {
         try {
             System.out.println("FFmpeg处理开始");
             new File((outPath + fileName) + ".mov").delete();
@@ -92,7 +92,33 @@ public class RecordFX extends Main {
         } catch (Exception ignored) {
         }
     }
+    private void ffmpeg_MP4() {
+        try {
+            System.out.println("FFmpeg处理开始");
+            new File((outPath + fileName) + ".MP4").delete();
+            Platform.runLater(() -> progressBar.setProgress(-1));
 
+            if (Runtime.getRuntime().exec(new String[]{
+                    "ffmpeg", "-r", "60",
+                    "-i", outPath + fileName + "_Sequence" + File.separator + fileName + "_%d.png",
+                    "-filter:v", "\"setpts=" + quality + "*PTS\"",
+                    "-c:v", "libx264", "-preset", "slower", "-crf", "26",
+                    "-nostdin", "-y", "-loglevel", "quiet",
+                    outPath + fileName + ".mp4"
+            }, new String[]{System.getProperty("user.dir")}).waitFor() == 0) {
+                File sequence = new File(outPath + fileName + "_Sequence" + File.separator);
+                for (String file : Objects.requireNonNull(sequence.list()))
+                    new File(sequence, file).delete();
+                sequence.delete();
+
+                System.out.println("视频导出成功");
+            } else Platform.runLater(() -> {
+                progressBar.setProgress(0);
+                System.out.println("FFMPEG错误，序列已导出");
+            });
+        } catch (Exception ignored) {
+        }
+    }
     private void encodeFX() {
         new Thread("RecordFX_Encoding") {
             {
@@ -111,8 +137,9 @@ public class RecordFX extends Main {
                 System.gc();
 
                 if (sequence == 0)
-                    ffmpegFX();
-
+                    ffmpeg_MOV();
+                if (sequence == 1)
+                    ffmpeg_MP4();
                 Platform.runLater(() -> {
                     spine.setSpeed(1);
                     counter = 0;
@@ -136,7 +163,7 @@ public class RecordFX extends Main {
         @Override
         public void run() {
             PixmapIO.writePNG(Gdx.files.absolute(
-                    (outPath + fileName + "_Sequence" + File.separator + fileName) + "_" + index + ".png"),
+                            (outPath + fileName + "_Sequence" + File.separator + fileName) + "_" + index + ".png"),
                     new Pixmap(width, height, Pixmap.Format.RGBA8888) {{
                         for (int h = 0; h < height; h++) {
                             for (int w = 0; w < width; w++) {

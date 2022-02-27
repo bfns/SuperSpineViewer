@@ -130,16 +130,9 @@ public class Spine extends Main implements Initializable {
                         if (isLoad) System.out.println("请求重载");
                         else System.out.println("请求初始化");
 
-
                         //默认播放Idle动画，这里需要改成记录上一次选择的动画名称，因为不是所有模型都有同样的动画名
-                        C_Animate.setValue("Idle");
-                        spine.setIsPlay(false);
-                        try {
-                            Thread.sleep(250);
-                        } catch(InterruptedException ex) {
-                            Thread.currentThread().interrupt();
-                        }
-                        spine.setIsPlay(true);
+//                        C_Animate.setValue("Idle");
+                        replay();
                     }))
                     .collect(Collectors.toList());
             ObservableList<Text> fileObservableList = FXCollections.observableArrayList(textList);
@@ -147,7 +140,15 @@ public class Spine extends Main implements Initializable {
             event.consume();
         }
     }
-
+public void replay(){
+    spine.setIsPlay(false);
+    try {
+        Thread.sleep(300);
+        } catch(InterruptedException ex) {
+        Thread.currentThread().interrupt();
+        }
+    spine.setIsPlay(true);
+}
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         AtomicReference<String> headerColor = new AtomicReference<>(getColor((short) ((Math.random() * 12) % 22)));
@@ -188,6 +189,7 @@ public class Spine extends Main implements Initializable {
                     (observable, oldValue, newValue) ->{
 //                        T_Scale1.setText(String.valueOf((getValue())));
                         spine.setScale((float) getValue());
+                        replay();
                     });
         }};
         JFXTextField T_Scale1 = new JFXTextField()
@@ -200,12 +202,14 @@ public class Spine extends Main implements Initializable {
                         if(getText()!="0"){
                     T_Scale.setValue(Float.parseFloat(getText()));
                     spine.setScale(Float.parseFloat(getText()));
+                            replay();
                 }});
             setOnScroll(ScrollEvent -> {
                 double Scale_temp=Double.parseDouble(getText())-(ScrollEvent.getTextDeltaY()/30);
                 setText(String.valueOf(String.format("%.2f",Scale_temp)));
                 T_Scale.setValue(Double.parseDouble(String.format("%.2f",Scale_temp)));
                 spine.setScale(Float.parseFloat(String.valueOf(T_Scale.getValue())));
+                replay();
             });
 
         }};
@@ -231,7 +235,7 @@ public class Spine extends Main implements Initializable {
                     Bindings.createStringBinding(() -> ((int) (getValue()))+" ", slider.valueProperty())
             );
             valueProperty().addListener(
-                    (observable, oldValue, newValue) -> spine.setX((float) getValue()));
+                    (observable, oldValue, newValue) -> {spine.setX((float) getValue());replay();});
 
         }};
 
@@ -249,12 +253,14 @@ public class Spine extends Main implements Initializable {
                     if (getText().matches("-?[0-9]\\d*|-?([1-9]\\d*.\\d*|0\\.\\d*[1-9]\\d*)"))
                         T_X.setValue(Float.parseFloat(getText()));
                         spine.setX(Float.parseFloat(getText()));
+                replay();
             });
             setOnScroll(ScrollEvent -> {
                 float T_X_temp=Math.round(Float.parseFloat(getText())-ScrollEvent.getTextDeltaY());
                 T_X.setValue(T_X_temp);
                 setText(String.valueOf(T_X_temp));
                 spine.setX(T_X_temp);
+                replay();
             });
         }};
 
@@ -270,7 +276,7 @@ public class Spine extends Main implements Initializable {
                     Bindings.createStringBinding(() -> ((int) (getValue()))+" ", slider.valueProperty())
             );
             valueProperty().addListener(
-                    (observable, oldValue, newValue) -> spine.setY((float) getValue()));
+                    (observable, oldValue, newValue) -> {spine.setY((float) getValue());replay();});
         }};
 
         JFXTextField T_Y1 = new JFXTextField() {{
@@ -287,12 +293,14 @@ public class Spine extends Main implements Initializable {
                     if (getText().matches("-?[0-9]\\d*|-?([1-9]\\d*.\\d*|0\\.\\d*[1-9]\\d*)"))
                         T_Y.setValue(Float.parseFloat(getText()));
                         spine.setY(Float.parseFloat(getText()));
+                replay();
             });
             setOnScroll(ScrollEvent -> {
                 float T_Y_temp=Math.round(Float.parseFloat(getText())-ScrollEvent.getTextDeltaY());
                 T_Y.setValue(T_Y_temp);
                 setText(String.valueOf(T_Y_temp));
                 spine.setY(T_Y_temp);
+                replay();
             });
         }};
 
@@ -376,8 +384,9 @@ public class Spine extends Main implements Initializable {
         JFXDepthManager.setDepth(spinePane, 1);
 
         spinePane.getChildren().addAll(new VBox() {{
-            getChildren().addAll(header, new StackPane() {{
-                setStyle("-fx-background-radius: 0 0 5 5; -fx-background-color: rgb(255,255,255,0.87);");
+            getChildren().addAll(header, new StackPane()
+            {{
+                setStyle("-fx-background-radius: 0 0 5 5; -fx-background-color: rgb(208,0,255);");
                 setMargin(playButton, new Insets(0, 26, 0, 0));
                 setAlignment(playButton, Pos.TOP_RIGHT);
 
