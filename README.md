@@ -2,6 +2,7 @@
 
 [**详细说明请看原链接**](https://github.com/Aloento/SuperSpineViewer/blob/master/README.md)
 
+### 使用前注意额外下载此依赖：[**通用运行依赖**](https://github.com/Aloento/SuperSpineViewer/releases/tag/R1.0.0)并覆盖[**此ffmpeg版本**](https://www.gyan.dev/ffmpeg/builds/packages/ffmpeg-5.0-full_build.7z)
 
 ## 本工具在v1.2.6的基础上进行了以下修改，以方便日常使用：
 ### v1.2
